@@ -320,8 +320,8 @@ nav {
 
 .features-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 5.5rem;
 }
 
 .feature-card {
@@ -369,7 +369,7 @@ nav {
 .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 3rem;
+    gap: 5rem;
     margin-top: 3rem;
 }
 
