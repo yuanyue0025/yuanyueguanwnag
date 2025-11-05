@@ -68,38 +68,67 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// ===== Intersection Observer for Fade-in Animation =====
+// ===== Enhanced Intersection Observer for Animations =====
 const observerOptions = {
     threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
+    rootMargin: '0px 0px -80px 0px'
 };
 
-const observer = new IntersectionObserver(function(entries) {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
+// 创建性能优化的观察器
+const createAnimationObserver = () => {
+    return new IntersectionObserver(function(entries) {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                // 添加延迟以创建交错效果
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0) scale(1)';
+                    entry.target.classList.add('animated');
+                }, index * 100); // 每个元素延迟100ms
+
+                // 动画完成后停止观察以优化性能
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+};
+
+const observer = createAnimationObserver();
+
+// 观察所有需要动画的元素
+const animateElements = () => {
+    // Fade-in-up 元素
+    document.querySelectorAll('.fade-in-up').forEach((el, index) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        el.style.transitionDelay = `${index * 0.1}s`;
+        observer.observe(el);
     });
-}, observerOptions);
 
-// Observe all elements with fade-in-up class
-document.querySelectorAll('.fade-in-up').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(30px)';
-    el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-    observer.observe(el);
-});
+    // 卡片元素 - 交错动画
+    document.querySelectorAll('.feature-card, .product-card, .solution-card').forEach((el, index) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px) scale(0.95)';
+        el.style.transition = 'opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        el.style.transitionDelay = `${index * 0.15}s`;
+        observer.observe(el);
+    });
 
-// Observe all feature cards
-document.querySelectorAll('.feature-card, .product-card, .solution-card').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
-    observer.observe(el);
-});
+    // 统计卡片
+    document.querySelectorAll('.stat-item').forEach((el, index) => {
+        el.style.opacity = '0';
+        el.style.transform = 'scale(0.8)';
+        el.style.transition = 'opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        el.style.transitionDelay = `${index * 0.1}s`;
+        observer.observe(el);
+    });
+};
 
-// ===== Counter Animation for Stats =====
+// 使用 requestAnimationFrame 优化初始化
+requestAnimationFrame(animateElements);
+
+// ===== Enhanced Counter Animation with Easing =====
 function animateCounter(element) {
     const target = element.textContent;
     const isPercentage = target.includes('%');
@@ -107,22 +136,30 @@ function animateCounter(element) {
     const isMultiplier = target.includes('x');
     const isTime = target.includes('/');
 
-    let numericValue = parseInt(target.replace(/[^0-9]/g, ''));
+    let numericValue;
+    if (isTime) {
+        // For time format like "24/7", only extract the first number
+        numericValue = parseInt(target.split('/')[0]);
+    } else {
+        numericValue = parseInt(target.replace(/[^0-9]/g, ''));
+    }
     if (isNaN(numericValue)) return;
 
-    let current = 0;
-    const increment = numericValue / 50; // 50 steps
-    const duration = 1500; // 1.5 seconds
-    const stepTime = duration / 50;
+    const duration = 2000; // 2 seconds
+    const startTime = performance.now();
 
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= numericValue) {
-            current = numericValue;
-            clearInterval(timer);
-        }
+    // 使用 easeOutExpo 缓动函数
+    const easeOutExpo = (t) => {
+        return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+    };
 
-        let displayValue = Math.floor(current).toString();
+    const animate = (currentTime) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easedProgress = easeOutExpo(progress);
+
+        const current = Math.floor(easedProgress * numericValue);
+        let displayValue = current.toString();
 
         if (isPercentage) displayValue += '%';
         if (isPlus) displayValue += '+';
@@ -130,7 +167,21 @@ function animateCounter(element) {
         if (isTime) displayValue += '/7';
 
         element.textContent = displayValue;
-    }, stepTime);
+
+        if (progress < 1) {
+            requestAnimationFrame(animate);
+        } else {
+            // 确保最终值正确
+            let finalValue = numericValue.toString();
+            if (isPercentage) finalValue += '%';
+            if (isPlus) finalValue += '+';
+            if (isMultiplier) finalValue += 'x';
+            if (isTime) finalValue += '/7';
+            element.textContent = finalValue;
+        }
+    };
+
+    requestAnimationFrame(animate);
 }
 
 // Observe stat numbers
@@ -230,6 +281,185 @@ backToTopButton.addEventListener('mouseenter', function() {
 
 backToTopButton.addEventListener('mouseleave', function() {
     this.style.transform = 'translateY(0)';
+});
+
+// ===== Parallax Scrolling Effect (Disabled) =====
+// 视差滚动效果已禁用，如需启用请取消下方代码注释
+/*
+const parallaxElements = document.querySelectorAll('.hero-image, .product-image');
+
+let ticking = false;
+
+function updateParallax() {
+    const scrolled = window.scrollY;
+
+    parallaxElements.forEach((element, index) => {
+        const speed = 0.5 + (index * 0.1);
+        const yPos = -(scrolled * speed);
+
+        // 使用 transform 而不是 top/position 以获得更好的性能
+        if (element.classList.contains('hero-image')) {
+            element.style.transform = `translateY(${yPos * 0.3}px)`;
+        }
+    });
+
+    ticking = false;
+}
+
+window.addEventListener('scroll', function() {
+    if (!ticking) {
+        requestAnimationFrame(updateParallax);
+        ticking = true;
+    }
+});
+*/
+
+// ===== Mouse Tracking for Cards (Disabled) =====
+// 3D鼠标跟踪效果已禁用，如需启用请取消下方代码注释
+/*
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+
+if (!isMobile) {
+    const trackableCards = document.querySelectorAll('.feature-card, .product-card');
+
+    trackableCards.forEach(card => {
+        card.addEventListener('mousemove', function(e) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = (y - centerY) / 10;
+            const rotateY = (centerX - x) / 10;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+        });
+
+        card.addEventListener('mouseleave', function() {
+            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+        });
+    });
+}
+*/
+
+// ===== Smooth Reveal for Images =====
+const images = document.querySelectorAll('img');
+const imageObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const img = entry.target;
+            img.style.opacity = '0';
+            img.style.transform = 'scale(0.9)';
+            img.style.transition = 'opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+
+            // 图片加载完成后显示
+            if (img.complete) {
+                setTimeout(() => {
+                    img.style.opacity = '1';
+                    img.style.transform = 'scale(1)';
+                }, 100);
+            } else {
+                img.addEventListener('load', () => {
+                    img.style.opacity = '1';
+                    img.style.transform = 'scale(1)';
+                });
+            }
+
+            imageObserver.unobserve(img);
+        }
+    });
+}, { threshold: 0.1 });
+
+images.forEach(img => imageObserver.observe(img));
+
+// ===== Add Stagger Animation to Navigation Links =====
+document.addEventListener('DOMContentLoaded', function() {
+    const navLinks = document.querySelectorAll('.nav-links a');
+    navLinks.forEach((link, index) => {
+        link.style.opacity = '0';
+        link.style.transform = 'translateY(-10px)';
+        link.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+
+        setTimeout(() => {
+            link.style.opacity = '1';
+            link.style.transform = 'translateY(0)';
+        }, 100 + (index * 50));
+    });
+});
+
+// ===== Performance Monitoring =====
+if ('performance' in window) {
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            const perfData = performance.getEntriesByType('navigation')[0];
+            if (perfData) {
+                console.log('%c⚡ Page Load Performance', 'color: #34a853; font-size: 14px; font-weight: bold;');
+                console.log(`Load Time: ${Math.round(perfData.loadEventEnd - perfData.fetchStart)}ms`);
+            }
+        }, 0);
+    });
+}
+
+// ===== Service Impact Progress Bar Animation =====
+document.addEventListener('DOMContentLoaded', function() {
+    const progressBarObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // 找到所有进度条并触发动画
+                const progressBars = document.querySelectorAll('.progress-bar-fill');
+                progressBars.forEach((bar, index) => {
+                    const targetWidth = bar.getAttribute('data-width');
+                    // 使用 requestAnimationFrame 确保平滑动画
+                    requestAnimationFrame(() => {
+                        setTimeout(() => {
+                            bar.style.width = targetWidth + '%';
+                        }, 100 + (index * 300)); // 交错延迟
+                    });
+                });
+
+                // 停止观察以防重复触发
+                progressBarObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.3,
+        rootMargin: '0px 0px -100px 0px'
+    });
+
+    // 观察服务影响卡片
+    const serviceImpactCard = document.querySelector('.service-impact-card');
+    if (serviceImpactCard) {
+        progressBarObserver.observe(serviceImpactCard);
+    }
+
+    // 为度量项添加序列化出现动画
+    const metricItems = document.querySelectorAll('.metric-item-enhanced');
+    metricItems.forEach((item, index) => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateX(-20px)';
+        item.style.transition = 'opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    });
+
+    const metricObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const items = entry.target.querySelectorAll('.metric-item-enhanced');
+                items.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateX(0)';
+                    }, index * 200);
+                });
+                metricObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2 });
+
+    if (serviceImpactCard) {
+        metricObserver.observe(serviceImpactCard);
+    }
 });
 
 // ===== Console Welcome Message =====

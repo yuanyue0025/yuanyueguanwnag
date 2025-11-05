@@ -68,7 +68,7 @@ Then visit: `http://localhost:8000`
 ### Products (`pages/products.html`)
 - Detailed product information
   - 55" Floor Standing Kiosk
-  - 43" Desktop Version
+  - 32" Desktop Version
   - Custom OEM/ODM Solutions
 - Technical specifications
 - Feature comparison table
