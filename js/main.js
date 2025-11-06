@@ -462,6 +462,163 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// ===== Banking Timeline Interactive Animation =====
+document.addEventListener('DOMContentLoaded', function() {
+    const timelineItems = document.querySelectorAll('.timeline-item');
+
+    if (timelineItems.length > 0) {
+        // 为每个时间轴项添加过渡效果
+        timelineItems.forEach((item, index) => {
+            const dot = item.querySelector('.timeline-dot');
+            const content = item.querySelector('.timeline-content');
+            const popup = item.querySelector('.efficiency-popup');
+
+            // 设置默认过渡效果 - 使用弹性缓动函数
+            if (dot) {
+                dot.style.transition = 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            }
+            if (content) {
+                content.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            }
+            if (popup) {
+                popup.style.transition = 'opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            }
+
+            // 鼠标悬停效果已禁用
+            // 如需启用,请取消下方代码注释
+            /*
+            item.addEventListener('mouseenter', function() {
+                if (dot) {
+                    dot.style.transform = 'scale(1.15) rotate(5deg)';
+                    dot.style.boxShadow = '0 10px 30px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3)';
+                    dot.style.borderColor = 'rgba(255, 255, 255, 1)';
+                }
+
+                if (content) {
+                    content.style.background = 'rgba(255, 255, 255, 0.2)';
+                    content.style.boxShadow = '0 4px 20px rgba(255, 255, 255, 0.15)';
+                }
+
+                if (popup) {
+                    popup.style.display = 'block';
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            popup.style.opacity = '1';
+                            popup.style.transform = 'translateY(0) scale(1)';
+                        });
+                    });
+                }
+            });
+
+            item.addEventListener('mouseleave', function() {
+                if (dot) {
+                    dot.style.transform = 'scale(1) rotate(0deg)';
+                    dot.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.2)';
+                    dot.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+                }
+
+                if (content) {
+                    content.style.background = 'rgba(255, 255, 255, 0.1)';
+                    content.style.boxShadow = 'none';
+                }
+
+                if (popup) {
+                    popup.style.opacity = '0';
+                    popup.style.transform = 'translateY(-10px) scale(0.95)';
+                    setTimeout(() => {
+                        popup.style.display = 'none';
+                    }, 400);
+                }
+            });
+            */
+
+            // 初始化弹窗状态
+            if (popup) {
+                popup.style.opacity = '0';
+                popup.style.transform = 'translateY(-10px) scale(0.95)';
+            }
+        });
+
+        // 滚动时的入场动画
+        const timelineObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const items = entry.target.querySelectorAll('.timeline-item');
+                    items.forEach((item, index) => {
+                        // 初始状态
+                        item.style.opacity = '0';
+                        item.style.transform = 'translateX(-30px)';
+
+                        // 交错动画
+                        setTimeout(() => {
+                            item.style.transition = 'opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                            item.style.opacity = '1';
+                            item.style.transform = 'translateX(0)';
+                        }, index * 200);
+                    });
+
+                    timelineObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        // 观察时间轴容器
+        const timelineContainer = document.querySelector('.banking-timeline-card');
+        if (timelineContainer) {
+            timelineObserver.observe(timelineContainer);
+        }
+
+        // 时间轴线条动画
+        const timelineObserverLine = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const card = entry.target;
+                    const timelineLine = card.querySelector('.timeline-container').previousElementSibling;
+
+                    if (timelineLine) {
+                        // 时间轴线条从上到下生长动画
+                        timelineLine.style.height = '0';
+                        timelineLine.style.transition = 'height 1.5s ease-out';
+
+                        setTimeout(() => {
+                            timelineLine.style.height = '100%';
+                        }, 300);
+                    }
+
+                    timelineObserverLine.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        const bankingCard = document.querySelector('.banking-timeline-card');
+        if (bankingCard) {
+            timelineObserverLine.observe(bankingCard);
+        }
+
+        // 添加点击效果（可选 - 移动端友好）
+        timelineItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const popup = this.querySelector('.efficiency-popup');
+                if (popup) {
+                    const isVisible = popup.style.display === 'block';
+
+                    // 关闭所有其他弹窗
+                    document.querySelectorAll('.efficiency-popup').forEach(p => {
+                        p.style.display = 'none';
+                    });
+
+                    // 切换当前弹窗
+                    if (!isVisible) {
+                        popup.style.display = 'block';
+                        popup.style.opacity = '1';
+                        popup.style.transform = 'translateY(0)';
+                    }
+                }
+            });
+        });
+    }
+});
+
 // ===== Console Welcome Message =====
 console.log('%c🤖 Welcome to AI Kiosk Pro!', 'color: #667eea; font-size: 20px; font-weight: bold;');
 console.log('%cInterested in our technology? Contact us at sales@aikioskpro.com', 'color: #5f6368; font-size: 14px;');
