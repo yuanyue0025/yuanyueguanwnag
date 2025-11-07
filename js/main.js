@@ -236,39 +236,153 @@ window.addEventListener('load', function() {
 
 // ===== Back to Top Button =====
 const backToTopButton = document.createElement('button');
-backToTopButton.innerHTML = '↑';
+backToTopButton.innerHTML = `
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="transition: transform 0.3s ease;">
+        <path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+`;
+backToTopButton.setAttribute('aria-label', 'Back to top');
 backToTopButton.style.cssText = `
     position: fixed;
     bottom: 30px;
     right: 30px;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
     color: white;
-    border: none;
-    font-size: 24px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
     cursor: pointer;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     z-index: 999;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5), 0 0 20px rgba(118, 75, 162, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    backdrop-filter: blur(10px);
+    animation: pulse-glow 2s ease-in-out infinite;
 `;
+
+// Add animated gradient border
+const borderGradient = document.createElement('div');
+borderGradient.style.cssText = `
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f093fb, #4facfe, #00f2fe, #43e97b, #ff6b6b);
+    background-size: 400% 400%;
+    animation: gradientRotate 4s ease infinite;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+`;
+backToTopButton.appendChild(borderGradient);
+
+// Add particles effect
+for (let i = 0; i < 3; i++) {
+    const particle = document.createElement('div');
+    particle.style.cssText = `
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: white;
+        opacity: 0.6;
+        animation: float-particle ${2 + i * 0.5}s ease-in-out ${i * 0.3}s infinite;
+        pointer-events: none;
+    `;
+    backToTopButton.appendChild(particle);
+}
+
+// Add ripple effect container
+const rippleContainer = document.createElement('div');
+rippleContainer.style.cssText = `
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    overflow: hidden;
+`;
+backToTopButton.appendChild(rippleContainer);
 
 document.body.appendChild(backToTopButton);
 
+// Scroll progress ring with gradient
+const progressRing = document.createElement('svg');
+progressRing.setAttribute('width', '68');
+progressRing.setAttribute('height', '68');
+progressRing.style.cssText = `
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    transform: rotate(-90deg);
+    pointer-events: none;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+`;
+progressRing.innerHTML = `
+    <defs>
+        <linearGradient id="progress-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#4facfe;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#00f2fe;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#43e97b;stop-opacity:1" />
+        </linearGradient>
+    </defs>
+    <circle cx="34" cy="34" r="29"
+        stroke="rgba(255,255,255,0.2)"
+        stroke-width="4"
+        fill="none"/>
+    <circle id="progress-circle" cx="34" cy="34" r="29"
+        stroke="url(#progress-gradient)"
+        stroke-width="4"
+        fill="none"
+        stroke-dasharray="182"
+        stroke-dashoffset="182"
+        stroke-linecap="round"
+        style="transition: stroke-dashoffset 0.1s linear;"/>
+`;
+backToTopButton.appendChild(progressRing);
+
+const progressCircle = document.getElementById('progress-circle');
+
 window.addEventListener('scroll', function() {
+    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrolled = window.scrollY;
+    const progress = (scrolled / scrollHeight) * 182;
+
+    if (progressCircle) {
+        progressCircle.style.strokeDashoffset = 182 - progress;
+    }
+
     if (window.scrollY > 500) {
         backToTopButton.style.opacity = '1';
         backToTopButton.style.visibility = 'visible';
+        backToTopButton.style.transform = 'scale(1) rotate(0deg)';
+        backToTopButton.style.animation = 'pulse-glow 2s ease-in-out infinite';
     } else {
         backToTopButton.style.opacity = '0';
         backToTopButton.style.visibility = 'hidden';
+        backToTopButton.style.transform = 'scale(0.5) rotate(180deg)';
     }
 });
 
-backToTopButton.addEventListener('click', function() {
+backToTopButton.addEventListener('click', function(e) {
+    // Create ripple effect
+    const ripple = document.createElement('span');
+    ripple.style.cssText = `
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.6);
+        width: 100%;
+        height: 100%;
+        animation: ripple 0.6s ease-out;
+        pointer-events: none;
+    `;
+    rippleContainer.appendChild(ripple);
+
+    setTimeout(() => ripple.remove(), 600);
+
     window.scrollTo({
         top: 0,
         behavior: 'smooth'
@@ -276,12 +390,75 @@ backToTopButton.addEventListener('click', function() {
 });
 
 backToTopButton.addEventListener('mouseenter', function() {
-    this.style.transform = 'translateY(-5px)';
+    this.style.animation = 'none';
+    this.style.transform = 'scale(1.2) translateY(-8px) rotate(5deg)';
+    this.style.boxShadow = '0 15px 45px rgba(102, 126, 234, 0.7), 0 0 30px rgba(240, 147, 251, 0.5)';
+    borderGradient.style.opacity = '1';
+    const svg = this.querySelector('svg');
+    if (svg) svg.style.transform = 'translateY(-5px) scale(1.2)';
 });
 
 backToTopButton.addEventListener('mouseleave', function() {
-    this.style.transform = 'translateY(0)';
+    this.style.animation = 'pulse-glow 2s ease-in-out infinite';
+    this.style.transform = 'scale(1)';
+    this.style.boxShadow = '0 10px 30px rgba(102, 126, 234, 0.5), 0 0 20px rgba(118, 75, 162, 0.3)';
+    borderGradient.style.opacity = '0';
+    const svg = this.querySelector('svg');
+    if (svg) svg.style.transform = 'translateY(0) scale(1)';
 });
+
+// Add keyframe animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes ripple {
+        from {
+            transform: scale(0);
+            opacity: 1;
+        }
+        to {
+            transform: scale(2.5);
+            opacity: 0;
+        }
+    }
+
+    @keyframes pulse-glow {
+        0%, 100% {
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5), 0 0 20px rgba(118, 75, 162, 0.3);
+        }
+        50% {
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.7), 0 0 30px rgba(240, 147, 251, 0.5);
+        }
+    }
+
+    @keyframes float-particle {
+        0%, 100% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.6;
+        }
+        25% {
+            transform: translate(15px, -15px) scale(0.8);
+            opacity: 0.3;
+        }
+        50% {
+            transform: translate(0, -25px) scale(1.2);
+            opacity: 0.8;
+        }
+        75% {
+            transform: translate(-15px, -15px) scale(0.8);
+            opacity: 0.3;
+        }
+    }
+
+    @keyframes gradientRotate {
+        0%, 100% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+    }
+`;
+document.head.appendChild(style);
 
 // ===== Parallax Scrolling Effect (Disabled) =====
 // 视差滚动效果已禁用，如需启用请取消下方代码注释
