@@ -49,13 +49,112 @@
         <div class="container">
             <div class="features-grid">
                 <div class="feature-card">
-                    <div style="height: 200px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 15px; margin-bottom: 1rem;"></div>
+                    <div style="height: 200px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 15px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                        <!-- Decorative circles -->
+                        <div style="position: absolute; width: 200px; height: 200px; background: rgba(255,255,255,0.05); border-radius: 50%; top: -80px; right: -80px;"></div>
+                        <div style="position: absolute; width: 150px; height: 150px; background: rgba(255,255,255,0.08); border-radius: 50%; bottom: -60px; left: -60px;"></div>
+
+                        <!-- Main Icon -->
+                        <svg width="140" height="140" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg" style="position: relative; z-index: 1;">
+                            <!-- Brain/AI Core -->
+                            <circle cx="70" cy="70" r="45" fill="white" opacity="0.95"/>
+
+                            <!-- AI Chip Pattern -->
+                            <rect x="50" y="50" width="40" height="40" rx="4" stroke="#667eea" stroke-width="3" fill="none"/>
+                            <line x1="70" y1="50" x2="70" y2="40" stroke="#667eea" stroke-width="2.5"/>
+                            <line x1="70" y1="90" x2="70" y2="100" stroke="#667eea" stroke-width="2.5"/>
+                            <line x1="50" y1="70" x2="40" y2="70" stroke="#667eea" stroke-width="2.5"/>
+                            <line x1="90" y1="70" x2="100" y2="70" stroke="#667eea" stroke-width="2.5"/>
+
+                            <!-- Corner pins -->
+                            <circle cx="40" cy="40" r="3" fill="#667eea"/>
+                            <circle cx="100" cy="40" r="3" fill="#667eea"/>
+                            <circle cx="40" cy="100" r="3" fill="#667eea"/>
+                            <circle cx="100" cy="100" r="3" fill="#667eea"/>
+
+                            <!-- Center AI symbol -->
+                            <text x="70" y="77" font-size="24" font-weight="bold" fill="#667eea" text-anchor="middle" font-family="Arial">AI</text>
+
+                            <!-- Orbiting dots -->
+                            <circle cx="70" cy="25" r="4" fill="#FFD700">
+                                <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/>
+                            </circle>
+                            <circle cx="115" cy="70" r="4" fill="#FFD700">
+                                <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+                            </circle>
+                            <circle cx="70" cy="115" r="4" fill="#FFD700">
+                                <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/>
+                            </circle>
+                            <circle cx="25" cy="70" r="4" fill="#FFD700">
+                                <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+                            </circle>
+
+                            <!-- Text labels -->
+                            <text x="15" y="20" font-size="9" font-weight="600" fill="white" opacity="0.9" font-family="Arial">SMART</text>
+                            <text x="95" y="20" font-size="9" font-weight="600" fill="white" opacity="0.9" font-family="Arial">AUTO</text>
+                            <text x="10" y="130" font-size="9" font-weight="600" fill="white" opacity="0.9" font-family="Arial">EFFICIENT</text>
+                            <text x="90" y="130" font-size="9" font-weight="600" fill="white" opacity="0.9" font-family="Arial">DIGITAL</text>
+                        </svg>
+                    </div>
                     <h3>AI Digital Intelligent Employee Solution</h3>
-                    <p>Everything you need to know before purchasing an interactive kiosk for your business.</p>
+                    <p>An AI platform that empowers digital employees to work autonomously, enhancing efficiency and intelligent decision-making.</p>
                     <a href="#" style="color: var(--primary-blue); font-weight: 600;">Download PDF →</a>
                 </div>
                 <div class="feature-card">
-                    <div style="height: 200px; background: linear-gradient(135deg, #f093fb, #f5576c); border-radius: 15px; margin-bottom: 1rem;"></div>
+                    <div style="height: 200px; background: linear-gradient(135deg, #f093fb, #f5576c); border-radius: 15px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                        <!-- Decorative circles -->
+                        <div style="position: absolute; width: 180px; height: 180px; background: rgba(255,255,255,0.06); border-radius: 50%; top: -70px; right: -70px;"></div>
+                        <div style="position: absolute; width: 140px; height: 140px; background: rgba(255,255,255,0.08); border-radius: 50%; bottom: -50px; left: -50px;"></div>
+
+                        <!-- Main Icon -->
+                        <svg width="140" height="140" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg" style="position: relative; z-index: 1;">
+                            <!-- Document/List base -->
+                            <rect x="35" y="20" width="70" height="100" rx="6" fill="white" opacity="0.95"/>
+
+                            <!-- Header bar -->
+                            <rect x="35" y="20" width="70" height="18" rx="6" fill="#f5576c" opacity="0.8"/>
+                            <text x="70" y="32" font-size="8" font-weight="700" fill="white" text-anchor="middle" font-family="Arial">FUNCTIONS</text>
+
+                            <!-- Function list items with icons and text -->
+                            <g opacity="0.85">
+                                <!-- Item 1 - Chat -->
+                                <circle cx="45" cy="52" r="4" fill="#f093fb"/>
+                                <text x="54" y="54" font-size="7" font-weight="600" fill="#f093fb" font-family="Arial">Voice Chat</text>
+
+                                <!-- Item 2 - Screen -->
+                                <rect x="41" y="66" width="8" height="6" rx="1" fill="#f5576c"/>
+                                <text x="54" y="70" font-size="7" font-weight="600" fill="#f5576c" font-family="Arial">HD Display</text>
+
+                                <!-- Item 3 - Touch -->
+                                <circle cx="45" cy="85" r="4" fill="#f093fb"/>
+                                <circle cx="45" cy="85" r="2" fill="white"/>
+                                <text x="54" y="87" font-size="7" font-weight="600" fill="#f093fb" font-family="Arial">Touch Screen</text>
+
+                                <!-- Item 4 - Settings -->
+                                <circle cx="45" cy="102" r="4" stroke="#f5576c" stroke-width="1.5" fill="none"/>
+                                <circle cx="45" cy="102" r="1.5" fill="#f5576c"/>
+                                <text x="54" y="104" font-size="7" font-weight="600" fill="#f5576c" font-family="Arial">Customizable</text>
+                            </g>
+
+                            <!-- Digital human silhouette badge -->
+                            <g transform="translate(85, 90)">
+                                <circle cx="10" cy="10" r="15" fill="white" opacity="0.95"/>
+                                <circle cx="10" cy="8" r="4" fill="#f5576c"/>
+                                <path d="M 4 18 Q 4 13 10 13 Q 16 13 16 18" fill="#f5576c"/>
+                            </g>
+
+                            <!-- Checkmarks floating -->
+                            <path d="M 112 45 L 116 49 L 122 40" stroke="#FFD700" stroke-width="2.5" fill="none" stroke-linecap="round">
+                                <animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite"/>
+                            </path>
+                            <path d="M 115 75 L 119 79 L 125 70" stroke="#FFD700" stroke-width="2.5" fill="none" stroke-linecap="round">
+                                <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite"/>
+                            </path>
+
+                            <!-- Bottom text -->
+                            <text x="70" y="15" font-size="8" font-weight="600" fill="white" opacity="0.9" text-anchor="middle" font-family="Arial">ALL-IN-ONE</text>
+                        </svg>
+                    </div>
                     <h3>Function list of digital human all-in-one machine</h3>
                     <p>Zhilian offers multiple scenarios, diverse functions, and customizable adaptability to meet various needs</p>
                     <a href="../files/Function list of digital human all-in-one machine.xlsx" style="color: var(--primary-blue); font-weight: 600;">Download Excel →</a>
