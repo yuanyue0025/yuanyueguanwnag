@@ -357,4 +357,10 @@ async function startServer() {
   });
 }
 
-startServer();
+// 本地开发时启动服务器
+if (process.env.NODE_ENV !== 'production') {
+  startServer();
+}
+
+// Vercel 需要导出 app
+module.exports = app;
