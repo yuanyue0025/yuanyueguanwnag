@@ -1,3 +1,25 @@
 数字人一体机Google推广SEO执行方案.pdf
 网站交付说明.txt
 数字人一体机Google推广SEO方案.py
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# 环境变量
+.env
+.env.local
+
+# Vercel
+.vercel
+
+# 文章上传的图片
+images/articles/*
+!images/articles/.gitkeep
+
+# 文章静态HTML文件（现在使用动态页面，不再生成静态文件）
+pages/articles/*.html
+
+# 数据文件
+data/articles.json

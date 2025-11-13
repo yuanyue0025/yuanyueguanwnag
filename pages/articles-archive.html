@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TRRNR4364X"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-TRRNR4364X');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article Archive - 元岳科技 YuanYue Technology</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+    <style>
+        .archive-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .article-item {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .article-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        .article-image {
+            flex-shrink: 0;
+            width: 350px;
+            height: 150px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .article-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .article-placeholder {
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            opacity: 0.5;
+        }
+
+        .article-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .article-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #2d3748;
+        }
+
+        .article-title a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .article-title a:hover {
+            color: var(--primary-color);
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: #718096;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .article-summary {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .read-more {
+            display: inline-block;
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .read-more:hover {
+            color: var(--accent-color);
+            transform: translateX(4px);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 3rem;
+            padding: 2rem 0;
+        }
+
+        .pagination button {
+            padding: 10px 20px;
+            border: 2px solid var(--primary-color);
+            background: white;
+            color: var(--primary-color);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .pagination .page-info {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .loading-message {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+            font-size: 1.1rem;
+        }
+
+        .no-articles {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            .article-item {
+                flex-direction: column;
+            }
+
+            .article-image {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header id="header">
+        <nav class="container">
+            <a href="../index.html" class="logo">元岳科技 | YuanYue Tech</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="solutions.html">Solutions</a></li>
+                <li><a href="case-studies.html">Case Studies</a></li>
+                <li><a href="blog.html">Resources</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html" class="cta-button">Get Quote</a></li>
+            </ul>
+            <div class="mobile-menu-toggle" id="mobileMenuToggle">
+                <span></span><span></span><span></span>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero" style="min-height: 40vh; padding-top: 120px;">
+        <div class="container">
+            <div class="hero-content" style="text-align: center; grid-template-columns: 1fr;">
+                <div class="hero-text">
+                    <h1>Article Archive</h1>
+                    <p>Browse all our published articles and insights</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" style="background: var(--light-bg); padding: 4rem 0;">
+        <div class="archive-container">
+            <div id="articlesContainer">
+                <div class="loading-message">Loading articles...</div>
+            </div>
+
+            <div id="pagination" class="pagination" style="display: none;">
+                <button id="prevBtn" onclick="changePage(-1)">← Previous</button>
+                <span class="page-info">
+                    Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
+                </span>
+                <button id="nextBtn" onclick="changePage(1)">Next →</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>元岳科技 | YuanYue Tech</h3>
+                    <p>Leading provider of AI-powered Digital Human Kiosk solutions for businesses worldwide.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="solutions.html">Solutions</a></li>
+                        <li><a href="case-studies.html">Case Studies</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="articles-archive.html">Article Archive</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Email: info@yuanyue-tech.com<br>
+                    Phone: +1 (555) 123-4567</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 元岳科技 YuanYue Technology. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // API configuration
+        const API_URL = window.location.hostname === 'localhost'
+            ? 'http://localhost:3000/api'
+            : '/api';
+
+        // Pagination settings
+        let currentPage = 1;
+        const articlesPerPage = 10;
+        let allArticles = [];
+        let totalPages = 1;
+
+        // Fetch all articles
+        async function fetchArticles() {
+            try {
+                const response = await fetch(`${API_URL}/articles`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch articles');
+                }
+
+                allArticles = await response.json();
+
+                // Sort by date (newest first)
+                allArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                totalPages = Math.ceil(allArticles.length / articlesPerPage);
+
+                displayArticles();
+            } catch (error) {
+                console.error('Error fetching articles:', error);
+                document.getElementById('articlesContainer').innerHTML = `
+                    <div class="no-articles">
+                        <p>Failed to load articles. Please try again later.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Display articles for current page
+        function displayArticles() {
+            const container = document.getElementById('articlesContainer');
+
+            if (allArticles.length === 0) {
+                container.innerHTML = `
+                    <div class="no-articles">
+                        <p>No articles found.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const startIndex = (currentPage - 1) * articlesPerPage;
+            const endIndex = startIndex + articlesPerPage;
+            const pageArticles = allArticles.slice(startIndex, endIndex);
+
+            // Helper function to escape HTML
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            const articlesHtml = pageArticles.map(article => {
+                const date = new Date(article.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+
+                const imageHtml = article.image
+                    ? `<img src="${article.image}" alt="${escapeHtml(article.title)}">`
+                    : `<div class="article-placeholder">NEW</div>`;
+
+                // Generate article URL
+                // New format: Dynamic URL like /pages/article.html?id=123
+                // Legacy format: Static files like /pages/articles/article-123.html
+                let articleUrl = article.detailPageUrl || `./article.html?id=${article.id}`;
+
+                // Convert absolute paths to relative paths
+                if (articleUrl.startsWith('/pages/')) {
+                    articleUrl = articleUrl.replace('/pages/', './');
+                }
+
+                return `
+                    <div class="article-item">
+                        <div class="article-image">
+                            ${imageHtml}
+                        </div>
+                        <div class="article-content">
+                            <h2 class="article-title">
+                                <a href="${articleUrl}">${escapeHtml(article.title)}</a>
+                            </h2>
+                            <div class="article-meta">
+                                <span>By ${escapeHtml(article.author)}</span>
+                                <span>•</span>
+                                <span>${date}</span>
+                            </div>
+                            <p class="article-summary">${escapeHtml(article.summary)}</p>
+                            <a href="${articleUrl}" class="read-more">Read Article →</a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = articlesHtml;
+
+            // Update pagination
+            updatePagination();
+        }
+
+        // Update pagination controls
+        function updatePagination() {
+            const paginationDiv = document.getElementById('pagination');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const currentPageSpan = document.getElementById('currentPage');
+            const totalPagesSpan = document.getElementById('totalPages');
+
+            if (totalPages > 1) {
+                paginationDiv.style.display = 'flex';
+                currentPageSpan.textContent = currentPage;
+                totalPagesSpan.textContent = totalPages;
+
+                prevBtn.disabled = currentPage === 1;
+                nextBtn.disabled = currentPage === totalPages;
+            } else {
+                paginationDiv.style.display = 'none';
+            }
+        }
+
+        // Change page
+        function changePage(direction) {
+            const newPage = currentPage + direction;
+
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentPage = newPage;
+                displayArticles();
+
+                // Scroll to top of articles
+                document.querySelector('.archive-container').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        // Load articles on page load
+        document.addEventListener('DOMContentLoaded', fetchArticles);
+    </script>
+</body>
+</html>
