@@ -174,7 +174,7 @@
     <div id="errorContainer" class="error-container" style="display: none;">
         <h2>Article Not Found</h2>
         <p>Sorry, we couldn't find the article you're looking for.</p>
-        <a href="../index.html" class="back-button">← Back to Home</a>
+        <a href="#" id="backButtonError" class="back-button">← Back</a>
     </div>
 
     <div id="articleContainer" style="display: none;">
@@ -192,7 +192,7 @@
         <div class="article-content-wrapper">
             <img id="articleImage" class="article-image" style="display: none;">
             <div id="articleBody" class="article-body"></div>
-            <a href="../index.html" class="back-button">← Back to Home</a>
+            <a href="#" id="backButton" class="back-button">← Back</a>
         </div>
     </div>
 
@@ -313,6 +313,41 @@
 
         // Load article on page load
         document.addEventListener('DOMContentLoaded', loadArticle);
+
+        // 智能返回按钮处理函数
+        function handleBackButton(e) {
+            e.preventDefault();
+
+            // 检查 referrer (来源页面)
+            const referrer = document.referrer;
+
+            // 如果来源是文章归档页,返回归档页
+            if (referrer && referrer.includes('articles-archive.html')) {
+                window.location.href = './articles-archive.html';
+            }
+            // 如果有浏览器历史记录,使用浏览器后退
+            else if (window.history.length > 1) {
+                window.history.back();
+            }
+            // 否则返回首页
+            else {
+                window.location.href = '../index.html';
+            }
+        }
+
+        // 为所有返回按钮添加事件监听
+        document.addEventListener('DOMContentLoaded', function() {
+            const backButton = document.getElementById('backButton');
+            const backButtonError = document.getElementById('backButtonError');
+
+            if (backButton) {
+                backButton.addEventListener('click', handleBackButton);
+            }
+
+            if (backButtonError) {
+                backButtonError.addEventListener('click', handleBackButton);
+            }
+        });
     </script>
 </body>
 </html>
