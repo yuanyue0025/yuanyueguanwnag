@@ -576,6 +576,38 @@
         </div>
     </div>
 
+    <script>
+        // 身份验证检查
+        if (sessionStorage.getItem('adminAuth') !== 'true') {
+            window.location.href = '/admin/login.html';
+        }
+
+        // 登出功能
+        function logout() {
+            if (confirm('确定要退出登录吗?')) {
+                sessionStorage.removeItem('adminAuth');
+                sessionStorage.removeItem('adminUsername');
+                window.location.href = '/admin/login.html';
+            }
+        }
+
+        // 显示用户名
+        window.addEventListener('DOMContentLoaded', function() {
+            const username = sessionStorage.getItem('adminUsername');
+            if (username) {
+                const headerInfo = document.querySelector('.header-info');
+                if (headerInfo) {
+                    const logoutBtn = document.createElement('button');
+                    logoutBtn.textContent = '退出登录';
+                    logoutBtn.style.cssText = 'margin-left: 20px; padding: 8px 20px; background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; cursor: pointer; transition: all 0.3s;';
+                    logoutBtn.onmouseover = function() { this.style.background = 'rgba(255,255,255,0.3)'; };
+                    logoutBtn.onmouseout = function() { this.style.background = 'rgba(255,255,255,0.2)'; };
+                    logoutBtn.onclick = logout;
+                    headerInfo.appendChild(logoutBtn);
+                }
+            }
+        });
+    </script>
     <script src="/admin/admin.js"></script>
 </body>
 </html>

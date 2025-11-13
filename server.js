@@ -102,6 +102,27 @@ async function readArticles() {
 
 // API路由
 
+// 管理员登录 API
+app.post('/api/admin/login', (req, res) => {
+  const { username, password } = req.body;
+
+  // 从环境变量读取管理员账号
+  const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
+  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'yuanyue2025';
+
+  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    res.json({
+      success: true,
+      message: '登录成功'
+    });
+  } else {
+    res.status(401).json({
+      success: false,
+      message: '用户名或密码错误'
+    });
+  }
+});
+
 // 获取所有文章
 app.get('/api/articles', async (req, res) => {
   try {
