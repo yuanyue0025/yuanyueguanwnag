@@ -106,6 +106,26 @@
             </div>
         </div>
     </section>
+    <!--Product Introduction Video-->
+    <section class="video-introduction">
+        <div class="container">
+            <div class="section-header">
+                <h2>Product Introduction</h2>
+                <p>Discover how our digital human solutions can transform your business</p>
+            </div>
+            <div class="video-container">
+                <video autoplay muted loop playsinline id="productVideo">
+                    <source src="https://yuanyeu-guanwng-img.oss-cn-beijing.aliyuncs.com/%E6%B5%B7%E5%A4%96%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="video-progress-bar">
+                    <div class="video-progress-fill"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
 
     <!-- Product Showcase -->
     <section class="product-showcase">
@@ -433,6 +453,91 @@
 
         // Load articles when page loads
         document.addEventListener('DOMContentLoaded', loadArticles);
+    </script>
+
+    <!-- Video Progress Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('productVideo');
+            const progressBar = document.querySelector('.video-progress-bar');
+            const progressFill = document.querySelector('.video-progress-fill');
+
+            if (video && progressBar && progressFill) {
+                let isDragging = false;
+
+                // 更新进度条
+                video.addEventListener('timeupdate', function() {
+                    if (!isDragging) {
+                        const progress = (video.currentTime / video.duration) * 100;
+                        progressFill.style.width = progress + '%';
+                    }
+                });
+
+                // 设置视频进度的函数
+                function setProgress(e) {
+                    const rect = progressBar.getBoundingClientRect();
+                    const offsetX = e.clientX - rect.left;
+                    const progress = Math.max(0, Math.min(1, offsetX / rect.width));
+                    video.currentTime = progress * video.duration;
+                    progressFill.style.width = (progress * 100) + '%';
+                }
+
+                // 点击进度条跳转
+                progressBar.addEventListener('click', function(e) {
+                    setProgress(e);
+                });
+
+                // 鼠标拖动
+                progressBar.addEventListener('mousedown', function(e) {
+                    isDragging = true;
+                    setProgress(e);
+                });
+
+                document.addEventListener('mousemove', function(e) {
+                    if (isDragging) {
+                        setProgress(e);
+                    }
+                });
+
+                document.addEventListener('mouseup', function() {
+                    isDragging = false;
+                });
+
+                // 触摸拖动（移动端支持）
+                progressBar.addEventListener('touchstart', function(e) {
+                    isDragging = true;
+                    const touch = e.touches[0];
+                    setProgress(touch);
+                    e.preventDefault();
+                });
+
+                document.addEventListener('touchmove', function(e) {
+                    if (isDragging) {
+                        const touch = e.touches[0];
+                        setProgress(touch);
+                    }
+                });
+
+                document.addEventListener('touchend', function() {
+                    isDragging = false;
+                });
+
+                // 视频加载成功
+                video.addEventListener('loadeddata', function() {
+                    console.log('视频加载成功');
+                });
+
+                // 视频加载失败
+                video.addEventListener('error', function(e) {
+                    console.error('视频加载失败:', e);
+                });
+
+                // 尝试手动播放
+                video.play().catch(function(error) {
+                    console.error('视频播放失败:', error);
+                });
+            }
+        });
     </script>
 </body>
 </html>
