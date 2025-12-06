@@ -796,6 +796,150 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// ===== Two Column Section Animation (Vertical Layout) =====
+document.addEventListener('DOMContentLoaded', function() {
+    // Intersection Observer for vertical stacked sections
+    const twoColumnObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Animate top and bottom sections with vertical slide
+                const leftColumn = entry.target.querySelector('.left-column');
+                const rightColumn = entry.target.querySelector('.right-column');
+
+                if (leftColumn) {
+                    leftColumn.style.opacity = '1';
+                    leftColumn.style.transform = 'translateY(0)';
+                }
+
+                if (rightColumn) {
+                    setTimeout(() => {
+                        rightColumn.style.opacity = '1';
+                        rightColumn.style.transform = 'translateY(0)';
+                    }, 200);
+                }
+
+                // Animate advantage items in left column
+                const advantageItems = entry.target.querySelectorAll('.advantage-item');
+                advantageItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateY(0)';
+                        item.style.transition = 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                    }, 300 + (index * 200));
+                });
+
+                // Animate team content in right column
+                const teamParagraphs = entry.target.querySelectorAll('.team-content > p');
+                teamParagraphs.forEach((p, index) => {
+                    setTimeout(() => {
+                        p.style.opacity = '1';
+                        p.style.transform = 'translateY(0)';
+                        p.style.transition = 'all 0.6s ease-out';
+                    }, 400 + (index * 200));
+                });
+
+                // Animate highlight box with scale effect
+                const highlightBox = entry.target.querySelector('.highlight-box');
+                if (highlightBox) {
+                    setTimeout(() => {
+                        highlightBox.style.opacity = '1';
+                        highlightBox.style.transform = 'scale(1)';
+                        highlightBox.style.transition = 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                    }, 800);
+                }
+
+                // Animate summary box
+                const summaryBox = entry.target.querySelector('.summary-box');
+                if (summaryBox) {
+                    setTimeout(() => {
+                        summaryBox.style.opacity = '1';
+                        summaryBox.style.transform = 'translateY(0)';
+                        summaryBox.style.transition = 'all 0.6s ease-out';
+                    }, 1200);
+                }
+
+                twoColumnObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -80px 0px'
+    });
+
+    // Observe the two column section
+    const twoColumnSection = document.querySelector('.two-column-section');
+    if (twoColumnSection) {
+        // Set initial states
+        const leftColumn = twoColumnSection.querySelector('.left-column');
+        const rightColumn = twoColumnSection.querySelector('.right-column');
+
+        if (leftColumn) {
+            leftColumn.style.transition = 'all 0.8s ease-out';
+        }
+
+        if (rightColumn) {
+            rightColumn.style.transition = 'all 0.8s ease-out';
+        }
+
+        twoColumnObserver.observe(twoColumnSection);
+    }
+
+    // Add number badge rotation animation on hover
+    const advantageItems = document.querySelectorAll('.advantage-item');
+    advantageItems.forEach(item => {
+        const badge = item.querySelector('h3 span');
+        if (badge) {
+            item.addEventListener('mouseenter', function() {
+                badge.style.transition = 'all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            });
+        }
+    });
+
+    // ===== Progress Groups Animation =====
+    const progressGroups = document.querySelectorAll('.progress-group');
+    if (progressGroups.length > 0) {
+        const progressObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Fade in the progress group (handles both left and right slide-in)
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateX(0)';
+
+                    // Animate each progress item within this group
+                    const progressItems = entry.target.querySelectorAll('.progress-item');
+                    progressItems.forEach((item, index) => {
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                            item.style.transform = 'translateY(0)';
+                            item.style.transition = 'all 0.5s ease-out';
+
+                            // Animate the progress bar
+                            const progressBar = item.querySelector('.progress-bar');
+                            if (progressBar) {
+                                const targetWidth = progressBar.getAttribute('data-width');
+                                setTimeout(() => {
+                                    progressBar.style.width = targetWidth + '%';
+                                }, 100);
+                            }
+                        }, index * 150);
+                    });
+
+                    progressObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.2,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        // Observe each progress group
+        progressGroups.forEach(group => {
+            group.style.transition = 'all 0.8s ease-out';
+            progressObserver.observe(group);
+        });
+    }
+});
+
 // ===== Console Welcome Message =====
 console.log('%c🤖 Welcome to AI Kiosk Pro!', 'color: #667eea; font-size: 20px; font-weight: bold;');
 console.log('%cInterested in our technology? Contact us at sales@aikioskpro.com', 'color: #5f6368; font-size: 14px;');
